@@ -4,7 +4,7 @@
     <div class="page-wrapper my-3">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-3">
+          <div class="col-sm-4 col-lg-3">
             <h3>Channels</h3>
             <hr />
             <div class="card channels">
@@ -14,13 +14,25 @@
                 </li>
               </ul>
             </div>
+            <div class="d-block d-lg-none mt-3">
+              <h3>Members</h3>
+              <hr />
+              <ul class="members list-group list-group-flush">
+                <li class="list-group-item" v-for="member in this.members">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <strong>{{ member.displayName }}</strong><br />
+                    <div class="status" :class="member.isActive ? 'active' : 'inactive'"></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="col-lg-6">
+          <div class="col-sm-8 col-lg-6 mt-3 mt-sm-0">
             <h3>Messages</h3>
             <hr />
             <Chat :currentChannel="currentChannel" :socket="socket" />
           </div>
-          <div class="col-lg-3">
+          <div class="col-sm-3 d-none d-lg-block">
             <h3>Members</h3>
             <hr />
             <ul class="members list-group list-group-flush">
@@ -61,7 +73,7 @@ export default {
       this.currentChannel = channel;
     },
     initChannels() {
-      this.socket = socketClient("https://pj-chat-server.herokuapp.com/");
+      this.socket = socketClient(process.env.NODE_ENV ? "http://localhost:3000/" : "https://pj-chat-server.herokuapp.com/");
       db.collection("channels").get().then(response => {
         let list = [];
         response.forEach(item => {
