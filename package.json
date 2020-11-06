@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build  && node server.js",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -13,7 +13,6 @@
     "firebase": "^8.0.0",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
-    "pusher": "^4.0.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
