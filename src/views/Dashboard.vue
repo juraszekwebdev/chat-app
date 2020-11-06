@@ -73,7 +73,7 @@ export default {
       this.currentChannel = channel;
     },
     initChannels() {
-      this.socket = socketClient(process.env.NODE_ENV ? "http://localhost:3000/" : "https://pj-chat-server.herokuapp.com/");
+      this.socket = socketClient(process.env.NODE_ENV === "development" ? "http://localhost:3000/" : "https://pj-chat-server.herokuapp.com/");
       db.collection("channels").get().then(response => {
         let list = [];
         response.forEach(item => {
