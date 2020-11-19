@@ -9,7 +9,7 @@
             <hr />
             <div class="card channels">
               <ul class="list-group list-group-flush">
-                <li class="list-group-item" :class="channel.slug === currentChannel && 'active'" v-for="channel in this.channels" @click="handleChooseChannel(channel.slug)">
+                <li class="list-group-item" :class="channel.slug === currentChannel && 'active'" v-for="channel in this.getChannels" @click="handleChooseChannel(channel.slug)">
                   # {{ channel.name }}
                 </li>
               </ul>
@@ -18,9 +18,9 @@
               <h3>Members</h3>
               <hr />
               <ul class="members list-group list-group-flush">
-                <li class="list-group-item" v-for="member in this.members">
+                <li class="list-group-item" v-for="member in this.getMembers">
                   <div class="d-flex justify-content-between align-items-center">
-                    <strong>{{ member.displayName }}</strong><br />
+                    <strong>{{ member.nickname }}</strong><br />
                     <div class="status" :class="member.isActive ? 'active' : 'inactive'"></div>
                   </div>
                 </li>
@@ -36,9 +36,9 @@
             <h3>Members</h3>
             <hr />
             <ul class="members list-group list-group-flush">
-              <li class="list-group-item" v-for="member in this.members">
+              <li class="list-group-item" v-for="member in this.getMembers">
                 <div class="d-flex justify-content-between align-items-center">
-                  <strong>{{ member.displayName }}</strong><br />
+                  <strong>{{ member.nickname }}</strong><br />
                   <div class="status" :class="member.isActive ? 'active' : 'inactive'"></div>
                 </div>
               </li>
@@ -54,27 +54,31 @@
 import Header from "@/components/Header";
 import Chat from "@/components/Chat";
 import {db} from "@/api/firebase";
-import socketClient from "socket.io-client";
-import {mapState} from "vuex";
+import {io} from "socket.io-client";
+import {mapState, mapActions} from "vuex";
+import _ from "lodash"
 
 export default {
   name: "Dashboard",
   components: {Chat, Header},
   data() {
     return {
-      socket: null,
+      socket: io(process.env.NODE_ENV === "development" ? "http://localhost:3000/" : "https://pj-chat-server.herokuapp.com/"),
       currentChannel: "general",
-      channels: [],
-      members: [],
     }
   },
   methods: {
+    ...mapActions([
+      "initChannelsData",
+      "initMembersData",
+      "updateMemberStatus"
+    ]),
     handleChooseChannel(channel) {
       this.currentChannel = channel;
     },
-    initChannels() {
-      this.socket = socketClient(process.env.NODE_ENV === "development" ? "http://localhost:3000/" : "https://pj-chat-server.herokuapp.com/");
-      db.collection("channels").get().then(response => {
+    async initChannels() {
+      return db.collection("channels").get().then(response => {
+        console.debug("Initializing channels...");
         let list = [];
         response.forEach(item => {
           list.push({
@@ -82,55 +86,62 @@ export default {
             ...item.data()
           })
         })
-        this.channels = list;
-        this.socket.emit("initChannels", list);
-      })
+        this.initChannelsData(list);
+        console.debug("Channels initialized.");
+      });
     },
-    initMembers() {
-      db.collection("users").get().then(response => {
+    async initMembers() {
+      return db.collection("users").get().then(response => {
+        console.debug("Initializing members...");
         let list = [];
         response.forEach(item => {
           list.push({
             uid: item.id,
             ...item.data(),
-            isActive: false
+            isActive: false,
+            channel: 'general',
           })
-        })
-        this.socket.emit("initMembers", list);
-      })
+        });
+        this.initMembersData(list);
+        console.debug("Members initialized.");
+      });
     },
   },
   computed: {
     ...mapState([
-      "user"
+      "user",
+      "chat"
     ]),
+    getMembers() {
+      return this.chat.members;
+    },
+    getChannels() {
+      return this.chat.channels;
+    }
   },
   created() {
-    this.initChannels();
-    this.initMembers()
-  },
-  mounted() {
-    this.socket.emit("userJoin", this.user)
-    this.socket.on("updateMembers", (members) => {
-      this.members = members;
+    console.debug('Created');
+    this.initChannels().then(() => {
+      this.initMembers().then(() => {
+        this.socket.emit("joined", ({user: this.user, channel: this.currentChannel}));
+
+      });
+    });
+
+    this.socket.on('updateMembers', members => {
+      members.forEach(member => {
+        this.updateMemberStatus({user: member, status: member.isActive});
+      })
     });
 
     window.onbeforeunload = () => {
-      this.socket.emit("userLeave", this.user)
-      this.socket.on("updateMembers", (members) => {
-        this.members = members;
-      })
-      this.socket.close();
-    };
+      this.socket.emit('leave', this.user);
+    }
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave?')
     if (answer) {
-      this.socket.emit("userLeave", this.user)
-      this.socket.on("updateMembers", (members) => {
-        this.members = members;
-      })
-      this.socket.close();
+      this.socket.emit('leave', this.user);
       next();
     } else {
       next(false)

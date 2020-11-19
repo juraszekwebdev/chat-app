@@ -7,7 +7,7 @@
         </div>
         <div class="col-6 col-lg-8">
           <div class="text-right">
-            <span class="text-white-50">{{user.nickName}}</span>
+            <span class="text-white-50">{{user.nickname}}</span>
             |
             <span style="cursor: pointer" @click="logout">Logout</span>
           </div>

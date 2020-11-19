@@ -10,7 +10,11 @@ export default new Vuex.Store({
       status: '',
       message: ''
     },
-    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
+    chat: {
+      channels: [],
+      members: [],
+    }
   },
   getters: {
     isLoggedIn: state => !!state.user
@@ -36,6 +40,16 @@ export default new Vuex.Store({
         localStorage.removeItem("user");
         state.user = null;
       })
+    },
+    initChannels(state, payload) {
+      state.chat.channels = payload;
+    },
+    initMembers(state, payload) {
+      state.chat.members = payload;
+    },
+    updateMemberStatus(state, {user, status}) {
+      const index = state.chat.members.findIndex(o => o.uid === user.uid);
+      state.chat.members[index].isActive = status;
     }
   },
   actions: {
@@ -53,6 +67,15 @@ export default new Vuex.Store({
     },
     logoutUser({commit}) {
       commit("logoutUser")
+    },
+    initChannelsData({commit}, payload) {
+      commit("initChannels", payload)
+    },
+    initMembersData({commit}, payload) {
+      commit("initMembers", payload)
+    },
+    updateMemberStatus({commit}, payload) {
+      commit("updateMemberStatus", payload)
     }
   },
   modules: {

@@ -77,7 +77,7 @@ export default {
         const user = {
           uid: response.user.uid,
           email: response.user.email,
-          nickName: response.user.displayName
+          nickname: response.user.displayName
         }
         localStorage.setItem('user', JSON.stringify(user))
         this.setUser(user);

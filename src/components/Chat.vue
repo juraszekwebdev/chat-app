@@ -3,7 +3,7 @@
     <ul class="messages list-group list-group-flush">
       <li class="list-group-item" v-for="message in this.getMessages">
         <div class="d-flex justify-content-between">
-          <strong>{{ message.owner.nickName }}</strong><br />
+          <strong>{{ message.owner.nickname }}</strong><br />
           <small>{{ formatDate(message.dateTime) }}</small>
         </div>
         <p>

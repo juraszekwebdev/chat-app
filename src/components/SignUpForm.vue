@@ -84,7 +84,7 @@ export default {
       email: "",
       password: "",
       repeatPassword: "",
-      nickName: ""
+      nickname: ""
     }
   },
   methods: {
@@ -101,11 +101,11 @@ export default {
       auth.createUserWithEmailAndPassword(this.email, this.password).then(response => {
         console.debug(response)
         auth.currentUser.updateProfile({
-          displayName: this.nickName
+          displayName: this.nickname
         })
         db.collection("users").doc(auth.currentUser.uid).set({
           email: this.email,
-          displayName: this.nickName
+          nickname: this.nickname
         }).then(response => {
           console.debug(response)
           this.alertSuccess("Account has been created successfully.")
