@@ -1,24 +1,22 @@
-# chat-app
+# Chat App
+Create account, join channels and chat with other people in real-time thanks to Socket.IO technology. 
 
-## Project setup
-```
-npm install
-```
+Demo version: [LINK](https://pj-chat-app.netlify.app/)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Running project
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### Install dependencies
+### `npm install`
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Run locally
+### `npm run serve`
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Build app
+### `npm run build`
+Builds the app for production to the `dist` folder.
+
+## Used technologies
+- VueJS
+- Lodash
+- Google Firebase (Auth & DB)
+- Socket.IO
