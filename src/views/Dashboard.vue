@@ -63,7 +63,7 @@ export default {
   components: {Chat, Header},
   data() {
     return {
-      socket: io(process.env.NODE_ENV === "development" ? "http://localhost:3000/" : "https://pj-chat-server.herokuapp.com/"),
+      socket: io(process.env.NODE_ENV === "development" ? "http://localhost:3000/" : "https://chat-server.temator.pl/"),
       currentChannel: "general",
     }
   },
