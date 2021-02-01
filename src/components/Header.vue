@@ -29,8 +29,12 @@ export default {
       'logoutUser',
     ]),
     logout() {
-      this.logoutUser();
-      this.$router.push('/sign-in');
+      const answer = window.confirm('Do you really want to leave?')
+      console.log(answer);
+      if(answer) {
+        this.logoutUser();
+        this.$router.push('/sign-in');
+      }
     }
   }
 }
