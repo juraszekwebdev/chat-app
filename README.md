@@ -2,6 +2,9 @@
 Create account, join channels and chat with other people in real-time thanks to Socket.IO technology. 
 
 Demo version: [LINK](https://pj-chat-app.netlify.app/)
+### Demo user access
+### Email: demo@demo.com
+### Password: demo123
 
 ## Running project
 
