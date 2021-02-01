@@ -140,10 +140,14 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     const answer = window.confirm('Do you really want to leave?')
+    console.log(answer);
     if (answer) {
       this.socket.emit('leave', this.user);
       next();
     } else {
+      next(false);
+      return false;
+
     }
   },
 }
