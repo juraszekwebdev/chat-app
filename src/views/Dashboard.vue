@@ -63,7 +63,7 @@ export default {
   components: {Chat, Header},
   data() {
     return {
-      socket: io(process.env.NODE_ENV === "development" ? "http://localhost:3000/" : "https://chat-server.temator.pl/"),
+      socket: io(process.env.NODE_ENV === "development" ? "http://localhost:3000/" : "https://pj-chat-server.herokuapp.com/"),
       currentChannel: "general",
     }
   },
@@ -144,7 +144,6 @@ export default {
       this.socket.emit('leave', this.user);
       next();
     } else {
-      next(false)
     }
   },
 }
