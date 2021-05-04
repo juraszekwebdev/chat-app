@@ -20,15 +20,15 @@
           />
         </div>
         <div class="form-group">
-          <label for="nickName">Nickname</label>
+          <label for="nickname">Nickname</label>
           <input
             type="text"
-            name="nickName"
+            name="nickname"
             class="form-control"
-            id="nickName"
+            id="nickname"
             placeholder="Nickname"
             @input="onChange"
-            :value="nickName"
+            :value="nickname"
             required
           />
         </div>
