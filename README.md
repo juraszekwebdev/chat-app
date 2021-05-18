@@ -1,25 +1,25 @@
-# Chat App
-Create account, join channels and chat with other people in real-time thanks to Socket.IO technology. 
+# Chat APP
+It is chat application written in Vue js. It provides authentication, and real-time chat system written in Socket.IO.
 
 Demo version: [LINK](https://pj-chat-app.netlify.app/)
-### Demo user access
-### Email: demo@demo.com
-### Password: demo123
 
-## Running project
+## Demo user:
+Email: demo@demo.com
+
+Password: demo123
+
+## Running project locally
 
 ### Install dependencies
 ### `npm install`
 
-### Run locally
-### `npm run serve`
+### Run locally (http://localhost:3000)
+### `npm run start`
 
-### Build app
+### Build app (/build)
 ### `npm run build`
-Builds the app for production to the `dist` folder.
 
 ## Used technologies
 - VueJS
-- Lodash
-- Google Firebase (Auth & DB)
+- Google Firebase
 - Socket.IO
